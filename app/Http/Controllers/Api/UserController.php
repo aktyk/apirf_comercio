@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
 
-class UserController extends Controller
+class UserController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +19,8 @@ class UserController extends Controller
     public function index()
     {
         $results = User::all();
-        return response()->json(['data'=>$results], 200);
+        //return response()->json(['data'=>$results], 200);
+        return $this->showAll($results);
     }
 
     /**
@@ -44,7 +45,8 @@ class UserController extends Controller
 
         $user = User::create($fields);
 
-        return response()->json(['data'=>$user], 200);
+        //return response()->json(['data'=>$user], 200);
+        return $this->showOne($user, 200);
     }
 
     /**
@@ -81,7 +83,8 @@ class UserController extends Controller
         //
         $user->delete();
 
-        return response()->json(['data'=>$user], 200);
+        //return response()->json(['data'=>$user], 200);
+        return $this->showOne($user, 200);
     }
 
     public function login(Request $request)

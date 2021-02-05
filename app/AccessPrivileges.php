@@ -11,6 +11,7 @@ class AccessPrivileges extends Model
 
     //
     protected $table = 'permiso';
+    protected $primaryKey = 'IdPermiso';
     public $timestamps = false;
     
     protected $fillable = [
@@ -18,4 +19,5 @@ class AccessPrivileges extends Model
     	'IdEmpleado',
     	'Estado',
     ];
+
 }

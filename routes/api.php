@@ -14,8 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::group(["middleware" => "apikey.validate"], function () {
-	Route::resource('users', 'User\UserController', ['except' => ['create', 'edit']]);
-	Route::name('login')->post('login', 'User\UserController@login');
+	Route::resource('users', 'Api\UserController', ['except' => ['create', 'edit']]);
+	Route::name('login')->post('login', 'Api\UserController@login');
 
 	Route::resource('accessprivileges', 'AccessPrivilegesController', ['except' => ['create', 'edit']]);
 });

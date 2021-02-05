@@ -22,16 +22,6 @@ class AccessPrivilegesController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -39,25 +29,30 @@ class AccessPrivilegesController extends Controller
      */
     public function store(Request $request)
     {
-        // Reglas de validación
-        $rules = [
-            'IdProceso' => ['required', Rule::unique('permiso')->where(function ($query) use ($request) {
-                return $query->where('IdEmpleado', $request->IdEmpleado);
-            })],
-            'IdEmpleado' => 'required',
-        ];
+        if ($request->has('Rol')) {
+            // Rol: CAJERO, permisos 1, 113, 66
 
-        // Validación
-        $this->validate($request, $rules);
+        } else {
+            // Reglas de validación
+            $rules = [
+                'IdProceso' => ['required', Rule::unique('permiso')->where(function ($query) use ($request) {
+                    return $query->where('IdEmpleado', $request->IdEmpleado);
+                })],
+                'IdEmpleado' => 'required',
+            ];
+            
+            // Validación
+            $this->validate($request, $rules);
 
-        // Registro de un permiso
-        $fields['IdProceso'] = $request->IdProceso;
-        $fields['IdEmpleado'] = $request->IdEmpleado;
-        $fields['Estado'] = AccessPrivileges::STATUS_ACTIVE;
-        $access_privileges = AccessPrivileges::create($fields);
+            // Registro de un permiso
+            $fields['IdProceso'] = $request->IdProceso;
+            $fields['IdEmpleado'] = $request->IdEmpleado;
+            $fields['Estado'] = AccessPrivileges::STATUS_ACTIVE;
+            $access_privileges = AccessPrivileges::create($fields);
 
-        // Respuesta
-        return response()->json(['data'=>$access_privileges], 201, [], JSON_NUMERIC_CHECK); 
+            // Respuesta
+            return response()->json(['data'=>$access_privileges], 201, [], JSON_NUMERIC_CHECK); 
+        }
     }
 
     /**
@@ -68,18 +63,7 @@ class AccessPrivilegesController extends Controller
      */
     public function show(AccessPrivileges $accessPrivileges)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\AccessPrivileges  $accessPrivileges
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(AccessPrivileges $accessPrivileges)
-    {
-        //
+        return $accessPrivileges;
     }
 
     /**
@@ -100,8 +84,14 @@ class AccessPrivilegesController extends Controller
      * @param  \App\AccessPrivileges  $accessPrivileges
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AccessPrivileges $accessPrivileges)
+    public function destroy(AccessPrivileges $accessPrivileges, Request $request)
     {
         //
+        //$accessPrivileges->delete();
+
+        //
+        $deletedRows = AccessPrivileges::where('IdPermiso', $request->IdPermiso)->delete();
+        
+        return response()->json(['data'=>$deletedRows]);
     }
 }
