@@ -31,6 +31,33 @@ class AccessPrivilegesController extends Controller
     {
         if ($request->has('Rol')) {
             // Rol: CAJERO, permisos 1, 113, 66
+            $rules = [
+                'IdEmpleado' => 'required',
+            ];
+
+            // Validación
+            $this->validate($request, $rules);
+
+            // Pendiente de aplicar validación al rol: CAJERO
+            // Se aplica por default permisos para el rol de CAJERO
+            // Registro del permiso
+            $fields['IdProceso'] = 1;
+            $fields['IdEmpleado'] = $request->IdEmpleado;
+            $fields['Estado'] = AccessPrivileges::STATUS_ACTIVE;
+            $access_privileges = AccessPrivileges::create($fields);
+
+            $fields['IdProceso'] = 66;
+            $fields['IdEmpleado'] = $request->IdEmpleado;
+            $fields['Estado'] = AccessPrivileges::STATUS_ACTIVE;
+            $access_privileges = AccessPrivileges::create($fields);
+
+            $fields['IdProceso'] = 113;
+            $fields['IdEmpleado'] = $request->IdEmpleado;
+            $fields['Estado'] = AccessPrivileges::STATUS_ACTIVE;
+            $access_privileges = AccessPrivileges::create($fields);
+
+            // Respuesta
+            return response()->json(['data'=>$access_privileges], 201, [], JSON_NUMERIC_CHECK);
 
         } else {
             // Reglas de validación
